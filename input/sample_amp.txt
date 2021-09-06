@@ -1,0 +1,75 @@
+SIZE 13X13X4
+BLOCK_NUM 15
+LINE_NUM 17
+
+BLOCK#1 1X1 f
+1-s
+
+BLOCK#2 1X1 f
+4-s
+
+BLOCK#3 1X1 f
+14-g
+
+BLOCK#4 1X1 f
+17-g
+
+BLOCK#5 1X1 f
+16-s
+
+BLOCK#6 1X1 f
+12-s
+
+BLOCK#7 1X1 f
+13-s
+
+BLOCK#8 2X4 c
+0,2-s
+1-g,-1
+0,-1
+0,3-s
+
+BLOCK#9 2X3 c
+0,5-s
+4-g,-1
+0,6-g
+
+BLOCK#10 2X3 c
+0,8-s
+10-s,-1
+0,12-g
+
+BLOCK#11 2X3 c
+0,9-s
+11-g,-1
+0,13-g
+
+BLOCK#12 2X3 c
+0,17-s
+16-g,-1
+0,15-s
+
+BLOCK#13 2X3 b
+0,3-g
+7-g,-1
+0,8-g
+
+BLOCK#14 2X3 b
+0,11-s
+7-s,-1
+0,10-g
+
+BLOCK#15 2X3 b
+0,6-s
+14-s,-1
+0,9-g
+
+BLOCK#16 2X3 b
+0,5-g
+15-g,-1
+0,2-g
+
+
+
+
+
