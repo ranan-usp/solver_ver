@@ -183,7 +183,6 @@ if __name__ == "__main__":
     #opamp
     input_file = g.os_path+"/input/sample_amp.txt"
     num_fix = [2,1,2,2]
-
     #試行回数
     max_exe_num = 1
     max_banmen,block_num,circuit_block,line_num,ini_block_info = read_input(input_file)
@@ -194,10 +193,8 @@ if __name__ == "__main__":
             banmen_list.append([i,j,4])
     banmen_list.remove([7,7,4])
     
-    height = 4
-    
+    height = 3
     line_width_list = [float(i/10) for i in range(10,21,1)]
-    
     false_count = 0
     for exe_num in range(max_exe_num):
         
@@ -206,26 +203,26 @@ if __name__ == "__main__":
         print(exe_num)
         false_count = 0
         
-        
         while result == "false":
             
             line_width = random.choice(line_width_list)
             banmen = random.choice(banmen_list)
             banmen[2] = height
-            print(banmen)
             block_info = copy.deepcopy(ini_block_info)
+            #banmen = [10,10,4]
             
             wiring = Wiring(exe_num,banmen,line_width,circuit_block,line_num,block_info,num_fix)
             
             result = wiring.start()
             #結果表示（ナンバーリンクソルバーが失敗するときもある）
+            
             print("=============================")
-            print("=============================")
-            print("=============================")
-            print("=============================")
-
+            print(result)
+            
+            
             if result == "false":
                 false_count += 1
+                print("false",end="->")
                 print(false_count)
             if false_count > 10:
                 banmen_list.remove(banmen)
@@ -241,7 +238,7 @@ if __name__ == "__main__":
         else:
             df.to_csv('result_false.csv', mode='a', index=False, header=False)
 
-        
+        """
         if false_flag == 1:
             pass
 
@@ -250,19 +247,5 @@ if __name__ == "__main__":
             execute_raphael(exe_num,line_num)
 
             exe_hspice(exe_num,line_num,banmen,line_width)
-            
-            """
-        
 
-            #file_path_circuit = os_path+"test4"
-            #change_param(file_path_circuit,path_result_res,path_result_cap,path_result_block)
-            """
-            """
-            if os.path.exists(path_result_res):   
-                os.remove(path_result_res)
-            if os.path.exists(path_result_cap):   
-                os.remove(path_result_cap)
-            if os.path.exists(path_result_block):   
-                os.remove(path_result_block)
-            """
-       
+        """

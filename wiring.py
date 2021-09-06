@@ -12,7 +12,7 @@ from implementation_temp import *
 from raphael_poly3D_temp import execute_raphael
 from block import Block
 from hspice import *
-from sub_main import solve
+from sub_main import solve_numlink,read_answer
 
 class Wiring():
 
@@ -617,15 +617,20 @@ class Wiring():
         ###
         ini_sg_list,core_list,walls = self.ini_make_path(num_position_list)
         
-        result_path = solve(self.banmen,ini_sg_list,core_list,self.line_num)
+        solve_numlink(self.banmen,ini_sg_list,core_list,self.line_num)
         
-        with open(result_path,"r") as f:
+        with open(g.path_out_numlink,"r") as f:
             s = f.read()
         lines = s.split("\n")
-        pprint.pprint(lines)
-        return "ans"
+        print(lines[1])
 
+        if lines[1] == "Test Passed!":
+            path_list = read_answer(self.banmen,lines,ini_sg_list)
+            return path_list,core_list
+        else:
+            return "false"
 
+        """
         short_sg_list = sorted(ini_sg_list,key = lambda x: (x[1][0]-x[2][0])**2 + (x[1][1]-x[2][1])**2 + (x[1][2]-x[2][2])**2)
         sg_list_list = []
         sg_list_list.append(short_sg_list)
@@ -665,10 +670,10 @@ class Wiring():
                     diagram4.walls.remove(start)
                     diagram4.walls.remove(goal)
 
-                    """
+                    
                     del diagram4.weights[start]
                     del diagram4.weights[goal]
-                    """
+                    
                     
                     #algorithmの種類（遠回りもできる）
                     # -> bread fast algorithm
@@ -710,14 +715,14 @@ class Wiring():
                 
                 return "false"
 
-            """
+            
             for p in path:
                 diagram4.weights[p] = weight
-            """
+            
 
     
         return path_list,core_list
-
+        """
 
     def make_perfect_path(self,result_block_list,path_list,block_direction):
 
@@ -831,18 +836,31 @@ class Wiring():
 
     def make_banmen(self,num_position_list,pos_info_dict):
         count_make_path  = 0
-        while True:
-                #設定した回路のサイズで，ナンバーリンク用の盤面を作る．
-            diagram4 = GridWithWeights(self.banmen[0], self.banmen[1], self.banmen[2])
         
-            ans = self.make_path(diagram4,num_position_list,pos_info_dict,count_make_path)
-            print("=========")
-            print(ans)
-            print("=========")
+        #設定した回路のサイズで，ナンバーリンク用の盤面を作る．
+        diagram4 = GridWithWeights(self.banmen[0], self.banmen[1], self.banmen[2])
 
-            return ans
-                
+        ###
+        weight = 5
+        ###
+        ini_sg_list,core_list,walls = self.ini_make_path(num_position_list)
         
+        solve_numlink(self.banmen,ini_sg_list,core_list,self.line_num)
+        
+        with open(g.path_out_numlink,"r") as f:
+            s = f.read()
+        lines = s.split("\n")
+
+        if lines[1] == "Test Passed!":
+
+            path_list = read_answer(self.banmen,lines,ini_sg_list)
+
+        else:
+
+            return "false"
+    
+        path_list,core_list = self.make_path(diagram4,num_position_list,pos_info_dict,count_make_path)
+
         #pathを番号順に並び替え
         path_list.sort()
 
@@ -963,8 +981,6 @@ class Wiring():
         core_color = ["-"+str(x) for x in range(1,10,1)]
         hantei = [0]*len(path_list)
 
-        
-        
         for path in path_list:
             #print(path)
             #path ->
@@ -1302,9 +1318,6 @@ class Wiring():
 
         insert_line = 32
 
-        
-
-
         if flag_raphael == 0:
             template_path = g.os_path + "/structure/poly3D_template.txt"
 
@@ -1393,15 +1406,13 @@ class Wiring():
         else:
             result_block_list,num_position_list,pos_info_dict = ans_random_pos_block
 
-        ans_make_banmen = self.make_banmen(num_position_list,pos_info_dict)
+        ans_numlink = self.make_banmen(num_position_list,pos_info_dict)
 
-        return ans_make_banmen
-
-        if ans_make_banmen == "false":
-            print("make_banmen_error")
+        if ans_numlink == "false":
+            print("numberlink_error")
             return "false"
         else:
-            core_list,path_list,new_path_list = ans_make_banmen
+            core_list,path_list,new_path_list = ans_numlink
 
         #csv出力のためのresult(pp出力作ったので，いらないかも)
         #ppはパワポの略
@@ -1428,11 +1439,8 @@ class Wiring():
         #powerpointで3Dモデル作り
         self.output_pp_vba(circuit)
 
-
         #raphaelのための入力ファイル作り
         self.make_poly3D(circuit,new_path_list)
-
-        
 
         #ここまでで，試行1回
         print("success")

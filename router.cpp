@@ -230,8 +230,8 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
     }
 
 
-    cout << size_x << " " << size_y << " " << size_z << endl;
-    cout << line_num << endl;
+    // cout << size_x << " " << size_y << " " << size_z << endl;
+    // cout << line_num << endl;
 
     // �����̏�����
     lfsr_random_init(seed);
@@ -258,8 +258,8 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
         // �������אڂ���ꍇ�X�L�b�v�A�����łȂ��ꍇ�͎��s
         if (adjacents[i] == false) {
 
-            cout << "LINE #" << (int)(i + 1) << endl;
-            cout << starts[i] << "," << goals[i] << endl;
+            // cout << "LINE #" << (int)(i + 1) << endl;
+            // cout << starts[i] << "," << goals[i] << endl;
             search(&(paths_size[i]), paths[i], starts[i], goals[i], weights);
 
         }
@@ -286,9 +286,6 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
     // [Step 2] Rip-up �ă��[�e�B���O
     ROUTING:
     for (ap_uint<16> round = 1; round <= 32768 /* = (2048 * 16) */; round++) {
-        cout << "===========" << endl;
-        cout << round << endl;
-        cout << "===========" << endl;
 #pragma HLS LOOP_TRIPCOUNT min=1 max=4000 avg=50
 
 #ifdef DEBUG_PRINT
@@ -298,13 +295,13 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
         // �Ώۃ��C����I��
 #ifdef USE_MOD_CALC
         // (1) ��]���Z��p������@
-        cout << line_num << endl;
+        // cout << line_num << endl;
         ap_uint<8> target = lfsr_random() % line_num; // i.e., lfsr_random_uint32(0, line_num - 1);
         // srand((unsigned int)time(NULL));
         // ap_uint<8> target = rand() % line_num;
 
-        cout << "=======" << endl;
-        cout << target << "," << last_target <<  endl;
+        // cout << "=======" << endl;
+        // cout << target << "," << last_target <<  endl;
 
 #else
         // (2) ��]���Z��p���Ȃ����@
@@ -385,15 +382,15 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
             //if (adjacents[i] == false) {
 
             OVERLAP_CHECK_PATH:
-            cout << "overlap_check" << endl;
-            cout << "line_num = " << i << endl;
+            // cout << "overlap_check" << endl;
+            // cout << "line_num = " << i << endl;
             for (ap_uint<9> j = 0; j < (ap_uint<9>)(paths_size[i]); j++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=255 avg=50
 //#pragma HLS PIPELINE rewind II=33
 #pragma HLS PIPELINE II=17
 #pragma HLS UNROLL factor=8
                 ap_uint<16> cell_id = paths[i][j];
-                cout << overlap_checks[cell_id] << endl;
+                // cout << overlap_checks[cell_id] << endl;
                 if (overlap_checks[cell_id] == 1) {
                     has_overlap = true;
                     
@@ -437,6 +434,8 @@ bool pynqrouter(char boardstr[BOARDSTR_SIZE], ap_uint<32> seed, ap_int<32> *stat
 #pragma HLS LOOP_TRIPCOUNT min=2 max=127 avg=50
         boardstr[starts[i]] = (i + 1);
         boardstr[goals[i]]  = (i + 1);
+        
+
         OUTPUT_LINE_PATH:
         for (ap_uint<9> j = 0; j < (ap_uint<9>)(paths_size[i]); j++) {
 #pragma HLS LOOP_TRIPCOUNT min=1 max=255 avg=50
@@ -679,8 +678,8 @@ void search(ap_uint<8> *path_size, ap_uint<16> path[MAX_PATH], ap_uint<16> start
     int dbg_goal_y = dbg_goal_xy % MAX_WIDTH;
     int dbg_goal_z = goal & BITMASK_Z;
 
-    cout << "(" << dbg_start_x << ", " << dbg_start_y << ", " << dbg_start_z << ") #" << start << " -> "
-         << "(" << dbg_goal_x  << ", " << dbg_goal_y  << ", " << dbg_goal_z  << ") #" << goal << endl;
+    // cout << "(" << dbg_start_x << ", " << dbg_start_y << ", " << dbg_start_z << ") #" << start << " -> "
+        //  << "(" << dbg_goal_x  << ", " << dbg_goal_y  << ", " << dbg_goal_z  << ") #" << goal << endl;
 #endif
 
     // �o�b�N�g���b�N
@@ -697,7 +696,7 @@ void search(ap_uint<8> *path_size, ap_uint<16> path[MAX_PATH], ap_uint<16> start
         int t_y = t_xy % MAX_WIDTH;
         int t_z = t & BITMASK_Z;
 
-        cout << "(" << t_x << ", " << t_y << ", " << t_z << ")," << endl;
+        // cout << "(" << t_x << ", " << t_y << ", " << t_z << ")," << endl;
         // cout << "  via " << "(" << t_x << ", " << t_y << ", " << t_z << ") #" << prev[t] << " dist=" << dist[t] << endl;
 #endif
 
@@ -709,8 +708,8 @@ void search(ap_uint<8> *path_size, ap_uint<16> path[MAX_PATH], ap_uint<16> start
     *path_size = p;
 
 #ifdef DEBUG_PRINT
-    cout << "max_path_len = " << p << endl;
-    cout << "max_pq_len = " << max_pq_len << endl;
+    // cout << "max_path_len = " << p << endl;
+    // cout << "max_pq_len = " << max_pq_len << endl;
 #endif
 
 }

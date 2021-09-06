@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     int size_y = (boardstr[4] - '0') * 10 + (boardstr[5] - '0');
     int size_z = (boardstr[7] - '0');
 
-    cout << size_x << "," << size_y << "," << size_z << endl;
+    // cout << size_x << "," << size_y << "," << size_z << endl;
 
     // �\���o���s
     ap_int<32> status;
@@ -105,6 +105,8 @@ int main(int argc, char *argv[]) {
             writing_file << endl;
         }
     }
+    
+    cout << "finish" << endl;
 
     return 0;
 }

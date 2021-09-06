@@ -20,9 +20,6 @@ def conv_boardstr(lines, terminals='initial', _seed=12345):
     for line in lines:
         if 'SIZE' in line:
             x, y, z = line.strip().split(' ')[1].split('X')
-            print("="*10)
-            print(x,y,z)
-            print("="*10)
             boardstr += ('X%02dY%02dZ%d' % (int(x), int(y), int(z)))
         if 'LINE_NUM' in line:
             pass

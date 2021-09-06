@@ -13,7 +13,7 @@
 #include <ap_int.h>
 #endif
 
-#define DEBUG_PRINT  // ���낢��\������
+// #define DEBUG_PRINT  // ���낢��\������
 #define USE_ASTAR    // A* �T�����g��
 #define USE_MOD_CALC // �^�[�Q�b�g���C���̑I���ɏ�]���Z��p����
 
